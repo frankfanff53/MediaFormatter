@@ -43,6 +43,10 @@ if __name__ == "__main__":
         color = "black"
         font_name = "LXGWWenKaiMono-Bold"
         bold = True
+    elif style == "thriller":
+        color = "green"
+        font_name = "LXGWWenKaiMono-Bold"
+        bold = True
 
     if not args.directory:
         input_file = Path(args.input)

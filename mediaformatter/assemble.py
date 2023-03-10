@@ -9,7 +9,7 @@ from matplotlib.colors import to_rgb
 from .utils import parse_subtitle, split_subtitle
 
 COLOR_MAP = {
-    "green": "darkgreen",
+    "green": np.array([8, 77, 42]) / 255,
     "black": "black",
     "red": "firebrick",
     "blue": "royalblue",
