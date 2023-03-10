@@ -1,7 +1,6 @@
 import json
 import re
-from pathlib import Path, PurePath
-from typing import Any, List, Optional, Union
+from pathlib import Path
 
 import ass
 
@@ -14,10 +13,7 @@ with open(base_path / "config" / "encodings.json", "r") as f:
 ENCODINGS = [encoding.replace("_", "-") for encoding in ENCODINGS]
 
 
-def parse_subtitle(
-    path: Union[str, PurePath],
-    available_encodings: Optional[List[str]] = ENCODINGS,
-) -> Any:
+def parse_subtitle(path, available_encodings=ENCODINGS):
     """Parse subtitle file.
 
     Args:
@@ -43,10 +39,7 @@ def parse_subtitle(
         raise Exception("Failed to parse subtitle file.")
 
 
-def split_subtitle(
-    doc: Any,
-    languages: Optional[List[Language]] = [Language.ENGLISH, Language.CHINESE],
-) -> dict[str, List[Any]]:
+def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
     """Split subtitle file into different languages.
 
     Args:
