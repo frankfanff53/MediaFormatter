@@ -7,7 +7,7 @@ A python library for reformatting the subtitle `.ass` files and wrapping subtitl
 To install this library you need to use the following command lines:
 
 ```bash
-git clone xxx
+git clone git@github.com:frankfanff53/MediaFormatter.git
 cd MediaFormatter
 make install
 ```
@@ -78,3 +78,4 @@ which is the first five English dialogs in the subtitle, with start and end time
 
 - [ ] Reformat the subtitle with the default configuration
 - [ ] Reformat the subtitle with the custom configuration
+- [ ] Merge the subtitle files to the corresponding video file
