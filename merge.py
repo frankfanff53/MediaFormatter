@@ -11,6 +11,7 @@ if __name__ == "__main__":
         "-d",
         "--directory",
         help="Directory to process",
+        required=True,
     )
 
     args = parser.parse_args()
