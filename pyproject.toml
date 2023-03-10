@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "mediaformatter"
+version = "0.1.0"
+description = ""
+authors = ["Feifan Fan <frankfanff53@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+ass = "^0.5.2"
+numpy = "^1.24.2"
+pytest = "^7.2.2"
+flake8 = "^6.0.0"
+autoflake = "^2.0.1"
+isort = "^5.12.0"
+black = "^23.1.0"
+six = "^1.16.0"
+lingua-language-detector = "^1.3.2"
+matplotlib = "^3.7.1"
+autocorrect = "^2.6.1"
+tqdm = "^4.65.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
