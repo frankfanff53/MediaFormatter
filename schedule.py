@@ -39,7 +39,8 @@ if __name__ == "__main__":
             continue
         print(f"Processing {directory}")
         result = subprocess.run([
-            "merge",
+            "python",
+            str(Path(__file__).parent / "merge.py"),
             "-d",
             directory,
             "-s",
