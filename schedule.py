@@ -33,7 +33,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     for i in range(int(args.start), int(args.end) + 1):
-        directory = f"{args.name} S{i:02d}"
+        directory = f"{args.name}.S{i:02d}"
         if not Path(directory).exists():
             print(f"Directory {directory} does not exist.")
             continue
