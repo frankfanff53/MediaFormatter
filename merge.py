@@ -14,6 +14,12 @@ if __name__ == "__main__":
         required=True,
     )
 
+    parser.add_argument(
+        "--subtitle-only",
+        help="Only merge subtitles",
+        action="store_true",
+    )
+
     args = parser.parse_args()
 
     if not args.directory:
@@ -35,32 +41,33 @@ if __name__ == "__main__":
             if not backup_file.exists():
                 file.rename(backup_file)
 
-    for file in tqdm(
-        sorted(backup_directory.iterdir()),
-        desc="Dropping attachments and subtitles",
-    ):
-        if file.suffix != ".mkv":
-            continue
-        # drop all attachments and subtitles
-        filename = file.name
-        modified_file = backup_directory / f"{filename}.mod.mkv"
-        commands = [
-            "mkvmerge",
-            "--no-subtitles",
-            "--no-attachments",
-            str(file),
-            "-o",
-            str(modified_file),
-        ]
-        result = subprocess.run(commands, capture_output=True)
-        if result.returncode != 0:
-            print(result.stderr.decode("utf-8"))
-            exit(1)
-        else:
-            # delete original file
-            file.unlink()
-            # rename modified file
-            modified_file.rename(backup_directory / filename)
+    if not args.subtitle_only:
+        for file in tqdm(
+            sorted(backup_directory.iterdir()),
+            desc="Dropping attachments and subtitles",
+        ):
+            if file.suffix != ".mkv":
+                continue
+            # drop all attachments and subtitles
+            filename = file.name
+            modified_file = backup_directory / f"{filename}.mod.mkv"
+            commands = [
+                "mkvmerge",
+                "--no-subtitles",
+                "--no-attachments",
+                str(file),
+                "-o",
+                str(modified_file),
+            ]
+            result = subprocess.run(commands, capture_output=True)
+            if result.returncode != 0:
+                print(result.stderr.decode("utf-8"))
+                exit(1)
+            else:
+                # delete original file
+                file.unlink()
+                # rename modified file
+                modified_file.rename(backup_directory / filename)
 
     for file in tqdm(
         sorted(backup_directory.iterdir()),
@@ -71,6 +78,7 @@ if __name__ == "__main__":
 
         commands = [
             "mkvmerge",
+            "--no-subtitles",
             str(file),
             "--language",
             "0:chi",
