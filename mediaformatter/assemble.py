@@ -23,12 +23,13 @@ def render_to_subtitle(
     font_overwrite=None,
     bold=False,
     fontsize_overwrite=None,
+    ignore_last_lines=0,
 ):
     base_path = Path(__file__).parent.parent
 
     doc = parse_subtitle(input_path)
     # Split subtitle into languages
-    split = split_subtitle(doc)
+    split = split_subtitle(doc, ignore_lines=ignore_last_lines)
 
     chinese_dialogs = split["CHINESE"]
     english_dialogs = split["ENGLISH"]

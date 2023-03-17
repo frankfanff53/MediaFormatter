@@ -30,6 +30,13 @@ if __name__ == "__main__":
         help="Font size to use",
     )
 
+    parser.add_argument(
+        "--ignore-last-lines",
+        help="Ignore last lines",
+        type=int,
+        default=0,
+    )
+
     args = parser.parse_args()
     style = args.style
     font_size = args.fontsize
@@ -60,7 +67,7 @@ if __name__ == "__main__":
             input_file.rename(backup_file)
 
         mf.render_to_subtitle(
-            backup_file, input_file, color, font_name, bold, font_size
+            backup_file, input_file, color, font_name, bold, font_size, args.ignore_last_lines
         )
     else:
         directory = Path(args.directory)
@@ -87,7 +94,7 @@ if __name__ == "__main__":
             sorted(list(backup_dir.iterdir())), desc="Processing files"
         ):
             mf.render_to_subtitle(
-                file, directory / file.name, color, font_name, bold, font_size
+                file, directory / file.name, color, font_name, bold, font_size, args.ignore_last_lines
             )
 
         print("Finished processing files.")

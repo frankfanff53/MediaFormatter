@@ -39,7 +39,7 @@ def parse_subtitle(path, available_encodings=ENCODINGS):
         raise Exception("Failed to parse subtitle file.")
 
 
-def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
+def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE], ignore_lines=0):
     """Split subtitle file into different languages.
 
     Args:
@@ -53,7 +53,7 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
         raise Exception("No language specified.")
     detector = LanguageDetectorBuilder.from_languages(*languages).build()
     split = {language.name: [] for language in languages}
-    for event in doc.events:
+    for event in doc.events[:-ignore_lines]:
         use_style = False
         # check if special formatting is used
         if (
