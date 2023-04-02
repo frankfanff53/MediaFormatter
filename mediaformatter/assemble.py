@@ -38,7 +38,14 @@ def render_to_subtitle(
     with open(base_path / "config" / "styles" / "CHINESE.json", "r") as f:
         chinese_style = json.load(f)
     if color_overwrite:
-        r, g, b = np.array(to_rgb(COLOR_MAP[color_overwrite])) * 255
+        if color_overwrite not in COLOR_MAP:
+            try:
+                r, g, b = np.array(to_rgb(color_overwrite)) * 255
+            except Exception:
+                print(f"Colour {color_overwrite} is not supported, please try it again")
+                exit(1)
+        else:
+            r, g, b = np.array(to_rgb(COLOR_MAP[color_overwrite])) * 255
         chinese_style["OutlineColour"] = {
             "r": int(r),
             "g": int(g),

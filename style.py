@@ -25,6 +25,13 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
+        "-c",
+        "--colour",
+        help="Colour to use",
+        default=None,
+    )
+
+    parser.add_argument(
         "-fs",
         "--fontsize",
         help="Font size to use",
@@ -54,6 +61,9 @@ if __name__ == "__main__":
         color = "green"
         font_name = "LXGWWenKaiMono-Bold"
         bold = True
+
+    if args.colour:
+        color = args.colour
 
     if not args.directory:
         input_file = Path(args.input)
