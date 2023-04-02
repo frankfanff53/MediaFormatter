@@ -53,7 +53,11 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE], ignore_l
         raise Exception("No language specified.")
     detector = LanguageDetectorBuilder.from_languages(*languages).build()
     split = {language.name: [] for language in languages}
-    for event in doc.events[:-ignore_lines]:
+    if ignore_lines != 0:
+        events = doc.events[:-ignore_lines]
+    else:
+        events = doc.events
+    for event in events:
         use_style = False
         # check if special formatting is used
         if (
