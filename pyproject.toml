@@ -6,7 +6,7 @@ authors = ["Feifan Fan <frankfanff53@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.8.1, < 4.0"
 ass = "^0.5.2"
 numpy = "^1.24.2"
 pytest = "^7.2.2"
