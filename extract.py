@@ -24,7 +24,7 @@ if __name__ == "__main__":
                         codec = track["codec"]
                         if "ass" in codec.lower():
                             subtile_suffix = "ass"
-                        elif "srt" in codec.lower:
+                        elif "srt" in codec.lower():
                             subtitle_suffix = "srt"
                         else:
                             raise ValueError(f"Subtitle format {codec} is not supported.")
