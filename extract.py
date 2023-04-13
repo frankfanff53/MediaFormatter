@@ -19,16 +19,23 @@ if __name__ == "__main__":
                 chi_track_ids = []
                 for track in mkv_info["tracks"]:
                     if track["type"] == "subtitles":
-                        if track["properties"]["language"] == "chi":
-                            chi_track_ids.append(track["id"])
-                if len(chi_track_ids) > 0:
-                    result = subprocess.run(
-                        [
-                            "mkvextract",
-                            "tracks",
-                            file.name,
-                            f"{chi_track_ids[0]}:{file.stem}.ass",
-                        ],
-                    )
-                    if result.returncode != 0:
-                        print(f"Failed to extract {file.name}")
+                        track_id = track["id"]
+                        track_name = track["track_name"]
+                        codec = track["properties"]["codec"]
+                        if "ass" in codec.lower():
+                            subtile_suffix = "ass"
+                        elif "srt" in codec.lower:
+                            subtitle_suffix = "srt"
+                        else:
+                            raise ValueError(f"Subtitle format {codec} is not supported.")
+                        
+                        result = subprocess.run(
+                            [
+                                "mkvextract",
+                                "tracks",
+                                file.name,
+                                f"{track_id}:{file.stem}_{'_'.join(track_name.split())}.{subtile_suffix}",
+                            ],
+                        )
+                        if result.returncode != 0:
+                            print(f"Failed to extract {file.name}")
