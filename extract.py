@@ -20,8 +20,8 @@ if __name__ == "__main__":
                 for track in mkv_info["tracks"]:
                     if track["type"] == "subtitles":
                         track_id = track["id"]
-                        track_name = track["track_name"]
-                        codec = track["properties"]["codec"]
+                        track_name = track["properties"]["track_name"]
+                        codec = track["codec"]
                         if "ass" in codec.lower():
                             subtile_suffix = "ass"
                         elif "srt" in codec.lower:
