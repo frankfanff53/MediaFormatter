@@ -23,7 +23,7 @@ if __name__ == "__main__":
                         track_name = track["properties"]["track_name"]
                         codec = track["codec"]
                         if "ass" in codec.lower():
-                            subtile_suffix = "ass"
+                            subtitle_suffix = "ass"
                         elif "srt" in codec.lower():
                             subtitle_suffix = "srt"
                         else:
@@ -34,7 +34,7 @@ if __name__ == "__main__":
                                 "mkvextract",
                                 "tracks",
                                 file.name,
-                                f"{track_id}:{file.stem}_{'_'.join(track_name.split())}.{subtile_suffix}",
+                                f"{track_id}:{file.stem}_{'_'.join(track_name.split())}.{subtitle_suffix}",
                             ],
                         )
                         if result.returncode != 0:
