@@ -39,7 +39,7 @@ if __name__ == "__main__":
         if args.movie:
             renamed_file = f"{working_dir}.{format}"
         else:
-            enamed_file = f"{working_dir}E{i+1:0>2}.{format}"
+            renamed_file = f"{working_dir}E{i+1:0>2}.{format}"
         print(f"Renaming: {file} -> {renamed_file}")
         renaming_schema.append((file, renamed_file))
     choice = input("Continue? (y/n): ")
