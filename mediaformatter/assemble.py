@@ -8,7 +8,7 @@ from matplotlib.colors import to_rgb
 
 from .utils import parse_subtitle, split_subtitle
 
-COLOR_MAP = {
+COLOUR_MAP = {
     "green": np.array([8, 77, 42]) / 255,
     "black": "black",
     "red": "firebrick",
@@ -16,36 +16,35 @@ COLOR_MAP = {
 }
 
 
-def render_to_subtitle(
-    input_path,
-    output_path,
-    color_overwrite=None,
-    font_overwrite=None,
-    bold=False,
-    fontsize_overwrite=None,
-    ignore_last_lines=0,
-):
+def render_to_subtitle(input_path, output_path, **kwargs):
     base_path = Path(__file__).parent.parent
 
     doc = parse_subtitle(input_path)
     # Split subtitle into languages
-    split = split_subtitle(doc, ignore_lines=ignore_last_lines)
+    split = split_subtitle(doc)
 
     chinese_dialogs = split["CHINESE"]
     english_dialogs = split["ENGLISH"]
 
+    colour_overwrite = kwargs.get("colour")
+    font_overwrite = kwargs.get("fontname")
+    fontsize_overwrite = kwargs.get("fontsize")
+    bold = kwargs.get("bold")
+
     # Get chinese dialog style
     with open(base_path / "config" / "styles" / "CHINESE.json", "r") as f:
         chinese_style = json.load(f)
-    if color_overwrite:
-        if color_overwrite not in COLOR_MAP:
+    if colour_overwrite:
+        if colour_overwrite not in COLOUR_MAP:
             try:
-                r, g, b = np.array(to_rgb(color_overwrite)) * 255
+                r, g, b = np.array(to_rgb(colour_overwrite)) * 255
             except Exception:
-                print(f"Colour {color_overwrite} is not supported, please try it again")
+                print(
+                    f"Colour {colour_overwrite} is not supported, please try it again"
+                )
                 exit(1)
         else:
-            r, g, b = np.array(to_rgb(COLOR_MAP[color_overwrite])) * 255
+            r, g, b = np.array(to_rgb(COLOUR_MAP[colour_overwrite])) * 255
         chinese_style["OutlineColour"] = {
             "r": int(r),
             "g": int(g),

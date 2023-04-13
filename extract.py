@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import subprocess
@@ -6,7 +7,18 @@ from pathlib import Path
 from tqdm import tqdm
 
 if __name__ == "__main__":
-    base_path = Path(os.getcwd())
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-d",
+        "--directory",
+        type=str,
+        default=".",
+        help="Directory to extract subtitles from",
+    )
+
+    args = parser.parse_args()
+
+    base_path = Path(os.getcwd()) / args.directory
     for file in tqdm(base_path.iterdir()):
         if file.is_file() and file.suffix == ".mkv":
             result = subprocess.run(
@@ -27,8 +39,10 @@ if __name__ == "__main__":
                         elif "srt" in codec.lower():
                             subtitle_suffix = "srt"
                         else:
-                            raise ValueError(f"Subtitle format {codec} is not supported.")
-                        
+                            raise ValueError(
+                                f"Subtitle format {codec} is not supported."
+                            )
+
                         result = subprocess.run(
                             [
                                 "mkvextract",

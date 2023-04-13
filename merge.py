@@ -89,8 +89,15 @@ if __name__ == "__main__":
             str(directory / file.name),
         ]
         for attachment in os.listdir(Path(__file__).parent / "fonts"):
-            commands.extend(["--attachment-mime-type", "application/x-truetype-font"])
-            commands.extend(["--attach-file", str(Path(__file__).parent / "fonts" / attachment)])
+            commands.extend(
+                ["--attachment-mime-type", "application/x-truetype-font"]
+            )
+            commands.extend(
+                [
+                    "--attach-file",
+                    str(Path(__file__).parent / "fonts" / attachment),
+                ]
+            )
         result = subprocess.run(commands, capture_output=True)
         if result.returncode != 0:
             print(result.stderr.decode("utf-8"))
