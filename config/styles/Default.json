@@ -1,0 +1,45 @@
+{
+    "Name": "Default",
+    "Fontname": "LXGWWenKaiMono-Bold",
+    "Fontsize": 19.0,
+    "PrimaryColour": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0
+    },
+    "SecondaryColour": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 240
+    },
+    "OutlineColour": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+    },
+    "BackColour": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+    },
+    "Bold": false,
+    "Italic": false,
+    "Underline": false,
+    "StrikeOut": false,
+    "ScaleX": 100.0,
+    "ScaleY": 100.0,
+    "Spacing": 0.0,
+    "Angle": 0.0,
+    "BorderStyle": 1,
+    "Outline": 2.0,
+    "Shadow": 1.0,
+    "Alignment": 2,
+    "MarginL": 20,
+    "MarginR": 20,
+    "MarginV": 20,
+    "Encoding": 1
+}
