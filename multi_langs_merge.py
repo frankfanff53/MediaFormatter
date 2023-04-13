@@ -28,7 +28,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     doc_primary = mf.parse_subtitle(args.primary_subtitle)
-    doc_secondary = mf.parse_subtitle("output_secondary.ass")
+    doc_secondary = mf.parse_subtitle(args.secondary_subtitle)
 
     output_doc = deepcopy(doc_primary)
     output_doc.styles._lines = (
@@ -44,67 +44,45 @@ if __name__ == "__main__":
         primary_line = primary_lines[i]
         secondary_line = secondary_lines[j]
 
-        primary_line_start = primary_line.start
-        primary_line_end = primary_line.end
-
-        secondary_line_start = secondary_line.start
-        secondary_line_end = secondary_line.end
-
-        while primary_line_start < secondary_line_start:
+        while primary_line.start < secondary_line.start:
             # this means current secondary line is way further
             # than the current primary line on the timeline
             output_doc.events._lines.append(primary_line)
             i += 1
             primary_line = primary_lines[i]
-            primary_line_start = primary_line.start
-            primary_line_end = primary_line.end
 
-        try:
-            assert primary_line_start == secondary_line_start
-        except AssertionError:
-            print("Start time does not match")
-            print(
-                f"Primary Lang: start: {primary_line.start}, "
-                f"end: {primary_line.end}, text: {primary_line.text}"
-            )
-            print(
-                f"Secondary Lang: start: {secondary_line.start}, "
-                f"end: {secondary_line.end}, text: {secondary_line.text}"
-            )
-            print("Aborted.")
-            exit(1)
+        secondary_line.start = primary_line.start
 
-        if primary_line_end != secondary_line_end:
+        if abs(primary_line.end - secondary_line.end) >= timedelta(seconds=0.5):
             synchronised_text = []
             while True:
-                if primary_line_end > secondary_line_end:
+                if primary_line.end > secondary_line.end:
                     synchronised_text.append(secondary_line.text)
                     j += 1
                     secondary_line = secondary_lines[j]
-                    secondary_line_start = secondary_line.start
-                    secondary_line_end = secondary_line.end
-                    if abs(primary_line_end - secondary_line_end) < timedelta(
+                    if abs(primary_line.end - secondary_line.end) < timedelta(
                         seconds=0.5
                     ):
                         synchronised_text.append(secondary_line.text)
-                        secondary_line.start = primary_line_start
-                        secondary_line.end = primary_line_end
+                        secondary_line.start = primary_line.start
+                        secondary_line.end = primary_line.end
                         secondary_line.text = " ".join(synchronised_text)
                         break
                 else:
                     synchronised_text.append(primary_line.text)
                     i += 1
                     primary_line = primary_lines[i]
-                    primary_line_start = primary_line.start
-                    primary_line_end = primary_line.end
-                    if abs(primary_line_end - secondary_line_end) < timedelta(
+                    if abs(primary_line.end - secondary_line.end) < timedelta(
                         seconds=0.5
                     ):
                         synchronised_text.append(primary_line.text)
-                        primary_line.start = secondary_line_start
-                        primary_line.end = secondary_line_end
+                        primary_line.start = secondary_line.start
+                        primary_line.end = secondary_line.end
                         primary_line.text = " ".join(synchronised_text)
                         break
+        else:
+            primary_line.end = secondary_line.end
+
         output_doc.events._lines.append(secondary_line)
         output_doc.events._lines.append(primary_line)
         i += 1
