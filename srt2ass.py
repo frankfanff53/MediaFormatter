@@ -98,5 +98,5 @@ if __name__ == "__main__":
         event_style["Text"] = dialog["dialog"]
         doc.events._lines.append(Dialogue(**event_style))
 
-    # with open(args.output, "w", encoding="utf-8-sig") as f:
-    #     doc.dump_file(f)
+    with open(args.output, "w", encoding="utf-8-sig") as f:
+        doc.dump_file(f)
