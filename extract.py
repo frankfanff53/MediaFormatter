@@ -32,7 +32,10 @@ if __name__ == "__main__":
                 for track in mkv_info["tracks"]:
                     if track["type"] == "subtitles":
                         track_id = track["id"]
-                        track_name = track["properties"]["track_name"]
+                        try:
+                            track_name = track["properties"]["track_name"]
+                        except KeyError:
+                            track_name = track["properties"]["language"]
                         codec = track["codec"]
                         if "ass" in codec.lower():
                             subtitle_suffix = "ass"
