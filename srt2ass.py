@@ -57,16 +57,18 @@ if __name__ == "__main__":
     for i, line in enumerate(contents):
         if i == 0:
             continue
-        if line.replace('\n', '').isdigit() and next_is_start_of_dialog:
+        if line.replace("\n", "").isdigit() and next_is_start_of_dialog:
             next_is_start_of_dialog = False
             dialog_end_index = i
             dialog = contents[dialog_start_index:dialog_end_index]
-            dialog = [line.replace('\n', '') for line in dialog if line != '\n']
+            dialog = [
+                line.replace("\n", "") for line in dialog if line != "\n"
+            ]
             dialog_start_index = dialog_end_index + 1
             timerange, text = dialog[0].replace(",", "."), " ".join(dialog[1:])
             start, end = timerange.split(" --> ")
             dialogs.append({"start": start, "end": end, "dialog": text})
-        elif line == '\n':
+        elif line == "\n":
             next_is_start_of_dialog = True
 
     doc = mf.parse_subtitle(base_path / "config" / "template.ass")

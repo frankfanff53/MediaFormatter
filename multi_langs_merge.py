@@ -44,49 +44,52 @@ if __name__ == "__main__":
         primary_line = primary_lines[i]
         secondary_line = secondary_lines[j]
 
-        while primary_line.start < secondary_line.start:
-            # this means current secondary line is way further
-            # than the current primary line on the timeline
-            output_doc.events._lines.append(primary_line)
-            i += 1
-            primary_line = primary_lines[i]
-
-        secondary_line.start = primary_line.start
-
-        if abs(primary_line.end - secondary_line.end) >= timedelta(seconds=0.5):
-            synchronised_text = []
-            while True:
-                if primary_line.end > secondary_line.end:
-                    synchronised_text.append(secondary_line.text)
-                    j += 1
-                    secondary_line = secondary_lines[j]
-                    if abs(primary_line.end - secondary_line.end) < timedelta(
-                        seconds=0.5
-                    ):
-                        synchronised_text.append(secondary_line.text)
-                        secondary_line.start = primary_line.start
-                        secondary_line.end = primary_line.end
-                        secondary_line.text = " ".join(synchronised_text)
-                        break
-                else:
-                    synchronised_text.append(primary_line.text)
+        if abs(primary_line.start - secondary_line.start) >= timedelta(
+            seconds=1
+        ):
+            # if both heads are not close enough, we just append the one with the earlier start time
+            if primary_line.start < secondary_line.start:
+                output_doc.events._lines.append(primary_line)
+                i += 1
+            else:
+                output_doc.events._lines.append(secondary_line)
+                j += 1
+        else:
+            # if both heads are close enough, we look at the end time
+            # if the end time of the primary line is earlier than the end time of the secondary line,
+            # we keep appending the primary line until the end time of the primary line is later than the end time of the secondary line
+            # then we append the secondary line
+            # otherwise, we append the secondary line
+            if primary_line.end < secondary_line.end:
+                synchromised_text = []
+                while (
+                    i < len(primary_lines)
+                    and primary_line.end < secondary_line.end
+                ):
+                    synchromised_text.append(primary_line.text)
                     i += 1
                     primary_line = primary_lines[i]
-                    if abs(primary_line.end - secondary_line.end) < timedelta(
-                        seconds=0.5
-                    ):
-                        synchronised_text.append(primary_line.text)
-                        primary_line.start = secondary_line.start
-                        primary_line.end = secondary_line.end
-                        primary_line.text = " ".join(synchronised_text)
-                        break
-        else:
-            primary_line.end = secondary_line.end
+                primary_line.start = secondary_line.start
+                primary_line.text = " ".join(synchromised_text)
+                primary_line.end = secondary_line.end
 
-        output_doc.events._lines.append(secondary_line)
-        output_doc.events._lines.append(primary_line)
-        i += 1
-        j += 1
+            elif primary_line.end > secondary_line.end:
+                synchromised_text = []
+                while (
+                    j < len(secondary_lines)
+                    and primary_line.end > secondary_line.end
+                ):
+                    synchromised_text.append(secondary_line.text)
+                    j += 1
+                    secondary_line = secondary_lines[j]
+                secondary_line.start = primary_line.start
+                secondary_line.text = " ".join(synchromised_text)
+                secondary_line.end = primary_line.end
+
+            output_doc.events._lines.append(secondary_line)
+            output_doc.events._lines.append(primary_line)
+            i += 1
+            j += 1
 
     with open(args.output, "w", encoding="utf-8-sig") as f:
         output_doc.dump_file(f)
