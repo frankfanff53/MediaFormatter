@@ -60,7 +60,7 @@ if __name__ == "__main__":
         input_filepath = base_path
         backup_path = base_path.parent / "backup" / base_path.name
         if not backup_path.exists():
-            backup_path.parent.mkdir(parents=True)
+            backup_path.mkdir(parents=True)
             if input_filepath.is_file():
                 if input_filepath.suffix in set(".ass", ".srt"):
                     input_filepath.rename(backup_path)
