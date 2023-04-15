@@ -11,7 +11,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-f",
         "--format",
-        choices=["ass", "mkv", "mp4"],
+        choices=["ass", "srt", "mkv", "mp4"],
         help="File format to rename",
         required=True,
     )
