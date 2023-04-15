@@ -69,15 +69,16 @@ if __name__ == "__main__":
                         f"File {input_filepath.name} is not in supported subtitle format, aborted."
                     )
                     exit(1)
-
-                mf.render_to_subtitle(
-                    backup_path, input_filepath, **render_args
-                )
             else:
                 for file in input_filepath.iterdir():
                     if file.suffix in set([".ass", ".srt"]):
                         file.rename(backup_path / file.name)
-
+        else:
+            if input_filepath.is_file():
+                mf.render_to_subtitle(
+                    backup_path, input_filepath, **render_args
+                )
+            else:
                 for file in tqdm(
                     sorted(list(backup_path.iterdir())),
                     desc="Processing files",
