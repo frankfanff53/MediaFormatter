@@ -71,14 +71,15 @@ if __name__ == "__main__":
             commands.append(str(base_path / file.name))
             if args.fonts:
                 for font in fonts_path.iterdir():
-                    commands.extend(
-                        [
-                            "--attachment-mime-type",
-                            "application/x-truetype-font",
-                            "--attach-file",
-                            str(fonts_path / font.name),
-                        ]
-                    )
+                    if font.is_file() and font.suffix in set([".ttf", ".otf"]):
+                        commands.extend(
+                            [
+                                "--attachment-mime-type",
+                                "application/x-truetype-font",
+                                "--attach-file",
+                                str(fonts_path / font.name),
+                            ]
+                        )
             commands.extend(
                 ["-o", str(base_path / (file.stem + "-modified.mkv"))]
             )
