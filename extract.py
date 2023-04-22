@@ -19,7 +19,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     base_path = Path(os.getcwd()) / args.directory
-    for file in tqdm(base_path.iterdir()):
+    for file in base_path.iterdir():
         if file.is_file() and file.suffix == ".mkv":
             result = subprocess.run(
                 ["mkvmerge", "-J", file.name],
