@@ -37,7 +37,7 @@ if __name__ == "__main__":
                         except KeyError:
                             track_name = track["properties"]["language"]
                         codec = track["codec"]
-                        if "ass" in codec.lower():
+                        if "substationalpha" in codec.lower():
                             subtitle_suffix = "ass"
                         elif "srt" in codec.lower():
                             subtitle_suffix = "srt"
