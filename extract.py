@@ -18,10 +18,8 @@ if __name__ == "__main__":
     base_path = Path(args.directory)
     if not base_path.is_dir():
         raise ValueError(f"{base_path} is not a directory.")
-        exit(1)
     if not base_path.exists():
         raise ValueError(f"{base_path} does not exist.")
-        exit(1)
 
     for file in base_path.iterdir():
         if file.is_file() and file.suffix == ".mkv":
