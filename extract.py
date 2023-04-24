@@ -1,10 +1,7 @@
 import argparse
 import json
-import os
 import subprocess
 from pathlib import Path
-
-from tqdm import tqdm
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -12,7 +9,7 @@ if __name__ == "__main__":
         "-d",
         "--directory",
         type=str,
-        default='.',
+        default=".",
         help="Directory to extract subtitles from",
     )
 
