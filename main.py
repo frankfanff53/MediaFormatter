@@ -1,6 +1,6 @@
-from typer import Typer, Option
-import mediaformatter as mf
+from typer import Option, Typer
 
+import mediaformatter as mf
 
 app = Typer()
 
@@ -38,7 +38,9 @@ def preprocess(
     directory: str,
     fonts: str = Option(None, help="Directory containing fonts"),
     drop_attachments: bool = Option(False, help="Drop attachments"),
-    with_jpn: bool = Option(False, help="Extract only files with Japanese audio"),
+    with_jpn: bool = Option(
+        False, help="Extract only files with Japanese audio"
+    ),
 ):
     mf.preprocess(
         directory=directory,

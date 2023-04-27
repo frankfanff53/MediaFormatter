@@ -4,6 +4,7 @@ from pathlib import Path, PurePath
 from typing import Union
 
 from tqdm import tqdm
+
 from .assemble import render_to_subtitle
 
 
@@ -47,7 +48,5 @@ def style(
             sorted(list(backup_path.iterdir())),
             desc="Processing files",
         ):
-            render_to_subtitle(
-                file, input_filepath / file.name, **render_args
-            )
+            render_to_subtitle(file, input_filepath / file.name, **render_args)
         print("Finished processing.")
