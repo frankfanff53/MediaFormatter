@@ -70,6 +70,7 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
             )
             # remove the style from the text
             dialog = re.sub(r"\{.*?\}", "", event.text)
+            # TODO: remove language detection
             language_detect = detector.detect_language_of(dialog)
             if language_detect is None:
                 continue
@@ -97,17 +98,19 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
             for i, line in enumerate(lines):
                 # remove all styles
                 line = re.sub(r"\{.*?\}", "", line)
-                # if the punctuation is not followed by a space, add a space
-                line = re.sub(
-                    r"(?<=[.,!?])(?=[^\s\d\.,!?])",
-                    " ",
-                    line,
-                )
-                language_detect = detector.detect_language_of(line)
-                if language_detect is None:
-                    language = "CHINESE" if i == 0 else "ENGLISH"
-                else:
-                    language = language_detect.name
+                # # TODO: if the punctuation is not followed by a space, add a space
+                # line = re.sub(
+                #     r"(?<=[.,!?])(?=[^\s\d\.,!?])",
+                #     " ",
+                #     line,
+                # )
+                # # TODO: Remove language detection
+                # language_detect = detector.detect_language_of(line)
+                # if language_detect is None:
+                #     language = "CHINESE" if i == 0 else "ENGLISH"
+                # else:
+                #     language = language_detect.name
+                language = "CHINESE" if i == 0 else "ENGLISH"
 
                 # if language == "CHINESE":
                 #     line, _ = pycorrector.correct(line)
