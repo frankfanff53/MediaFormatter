@@ -14,7 +14,7 @@ def extract(directory):
     for file in base_path.iterdir():
         if file.is_file() and file.suffix == ".mkv":
             result = subprocess.run(
-                ["mkvmerge", "-J", file.name],
+                ["mkvmerge", "-J", f"{directory}/{file.name}"],
                 capture_output=True,
                 text=True,
             )
