@@ -58,15 +58,13 @@ def extract(directory: str):
 @app.command()
 def srt2ass(
     input: str,
-    output: str,
     style_name: str = Option(
         "Default", help="The name of style for the rendered ass file"
     ),
     font_size: int = Option(19, help="The font size of the rendered ass file"),
 ):
     mf.srt2ass(
-        input=input,
-        output=output,
+        directory=input,
         style_name=style_name,
         font_size=font_size,
     )

@@ -1,10 +1,11 @@
-# import argparse
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 
 from ass import Dialogue, Style
 from ass.data import Color
+from tqdm import tqdm
 
 from .utils import parse_subtitle
 
@@ -14,14 +15,29 @@ def format_timestring(time_string):
     return datetime_obj.strftime("%H:%M:%S.%f")[:-4]
 
 
-def srt2ass(
+def srt2ass(directory, style_name, font_size):
+    base_path = Path(os.getcwd()) / directory
+
+    for file in tqdm(sorted(base_path.iterdir())):
+        output_file = ".".join(file.name.split(".")[:-1]) + ".ass"
+        if file.is_file() and file.suffix == ".srt":
+            convert(
+                input=file,
+                output=base_path / output_file,
+                style_name=style_name,
+                font_size=font_size,
+            )
+    print("Finish converting srt file(s).")
+
+
+def convert(
     input,
     output,
     style_name,
     font_size,
 ):
     subtitle_path = input
-    base_path = Path(__file__).parent
+    base_path = Path(__file__).parent.parent
 
     with open(subtitle_path, "r", encoding="utf-8-sig") as f:
         contents = f.readlines()
