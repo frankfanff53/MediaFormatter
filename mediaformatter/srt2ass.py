@@ -1,4 +1,4 @@
-import argparse
+# import argparse
 import json
 from datetime import datetime
 from pathlib import Path
@@ -6,7 +6,7 @@ from pathlib import Path
 from ass import Dialogue, Style
 from ass.data import Color
 
-import mediaformatter as mf
+from .utils import parse_subtitle
 
 
 def format_timestring(time_string):
@@ -14,36 +14,13 @@ def format_timestring(time_string):
     return datetime_obj.strftime("%H:%M:%S.%f")[:-4]
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-i",
-        "--input",
-        help="The input path of the srt file",
-        required=True,
-    )
-
-    parser.add_argument(
-        "-o",
-        "--output",
-        help="The output path of the converted ass file",
-        required=True,
-    )
-
-    parser.add_argument(
-        "--style-name",
-        help="The name of style for the rendered ass file",
-        default="Default",
-    )
-
-    parser.add_argument(
-        "--font-size",
-        help="The font size of the rendered ass file",
-        default=19,
-    )
-
-    args = parser.parse_args()
-    subtitle_path = args.input
+def srt2ass(
+    input,
+    output,
+    style_name,
+    font_size,
+):
+    subtitle_path = input
     base_path = Path(__file__).parent
 
     with open(subtitle_path, "r", encoding="utf-8-sig") as f:
@@ -71,14 +48,14 @@ if __name__ == "__main__":
         elif line == "\n":
             next_is_start_of_dialog = True
 
-    doc = mf.parse_subtitle(base_path / "config" / "template.ass")
+    doc = parse_subtitle(base_path / "config" / "template.ass")
     doc.styles._lines = []
     doc.events._lines = []
 
     with open(base_path / "config" / "styles" / "Default.json", "r") as f:
         default_style = json.load(f)
-        default_style["Name"] = args.style_name
-        default_style["Fontsize"] = args.font_size
+        default_style["Name"] = style_name
+        default_style["Fontsize"] = font_size
 
     for key in default_style:
         if "Colour" in key:
@@ -100,5 +77,5 @@ if __name__ == "__main__":
         event_style["Text"] = dialog["dialog"]
         doc.events._lines.append(Dialogue(**event_style))
 
-    with open(args.output, "w", encoding="utf-8-sig") as f:
+    with open(output, "w", encoding="utf-8-sig") as f:
         doc.dump_file(f)
