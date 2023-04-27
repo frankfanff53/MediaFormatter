@@ -6,15 +6,11 @@ from pathlib import Path
 
 def extract(directory):
     base_path = Path(os.getcwd()) / directory
-    if not base_path.is_dir():
-        raise ValueError(f"{base_path} is not a directory.")
-    if not base_path.exists():
-        raise ValueError(f"{base_path} does not exist.")
 
     for file in base_path.iterdir():
         if file.is_file() and file.suffix == ".mkv":
             result = subprocess.run(
-                ["mkvmerge", "-J", f"{directory}/{file.name}"],
+                ["mkvmerge", "-J", str(base_path / file.name)],
                 capture_output=True,
                 text=True,
             )
