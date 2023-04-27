@@ -1,56 +1,26 @@
-import argparse
 import os
-from pathlib import Path
+from numbers import Integral
+from pathlib import Path, PurePath
+from typing import Union
 
 from tqdm import tqdm
+from .assemble import render_to_subtitle
 
-import mediaformatter as mf
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-i",
-        "--input",
-        help="Input file path(s) to render",
-    )
-
-    parser.add_argument(
-        "-c",
-        "--colour",
-        help="Colour to use",
-        default=None,
-    )
-
-    parser.add_argument(
-        "-fs",
-        "--fontsize",
-        help="Font size to use",
-        default=None,
-    )
-
-    parser.add_argument(
-        "-fn",
-        "--fontname",
-        help="Font name to use",
-        default=None,
-    )
-
-    parser.add_argument(
-        "-b",
-        "--bold",
-        help="Bold text",
-        action="store_true",
-    )
-
-    args = parser.parse_args()
-
-    base_path = Path(os.getcwd()) / args.input
+def style(
+    input: Union[str, PurePath],
+    colour: str,
+    fontname: str,
+    fontsize: Integral,
+    bold: bool,
+) -> None:
+    base_path = Path(os.getcwd()) / input
 
     render_args = {
-        "colour": args.colour,
-        "fontsize": args.fontsize,
-        "fontname": args.fontname,
-        "bold": args.bold,
+        "colour": colour,
+        "fontsize": fontsize,
+        "fontname": fontname,
+        "bold": bold,
     }
 
     if not base_path.exists():
@@ -77,7 +47,7 @@ if __name__ == "__main__":
             sorted(list(backup_path.iterdir())),
             desc="Processing files",
         ):
-            mf.render_to_subtitle(
+            render_to_subtitle(
                 file, input_filepath / file.name, **render_args
             )
         print("Finished processing.")

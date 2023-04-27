@@ -1,21 +1,11 @@
-import argparse
 import json
+import os
 import subprocess
 from pathlib import Path
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-d",
-        "--directory",
-        type=str,
-        default=".",
-        help="Directory to extract subtitles from",
-    )
 
-    args = parser.parse_args()
-
-    base_path = Path(args.directory)
+def extract(directory):
+    base_path = Path(os.getcwd()) / directory
     if not base_path.is_dir():
         raise ValueError(f"{base_path} is not a directory.")
     if not base_path.exists():
@@ -30,7 +20,6 @@ if __name__ == "__main__":
             )
             if result.returncode == 0:
                 mkv_info = json.loads(result.stdout)
-                chi_track_ids = []
                 for track in mkv_info["tracks"]:
                     if track["type"] == "subtitles":
                         track_id = track["id"]
