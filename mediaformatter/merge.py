@@ -68,7 +68,7 @@ def merge(input, subtitle_only):
             "-o",
             str(directory / file.name),
         ]
-        for attachment in os.listdir(Path(__file__).parent / "fonts"):
+        for attachment in os.listdir(Path(__file__).parent.parent / "fonts"):
             commands.extend(
                 ["--attachment-mime-type", "application/x-truetype-font"]
             )
