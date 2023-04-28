@@ -62,11 +62,15 @@ def srt2ass(
         "Default", help="The name of style for the rendered ass file"
     ),
     font_size: int = Option(19, help="The font size of the rendered ass file"),
+    colour: str = Option(
+        None, help="The font outline colour of the rendered ass file"
+    ),
 ):
     mf.srt2ass(
         directory=input,
         style_name=style_name,
         font_size=font_size,
+        colour=colour,
     )
 
 

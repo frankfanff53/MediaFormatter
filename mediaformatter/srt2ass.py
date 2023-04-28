@@ -7,6 +7,7 @@ from ass import Dialogue, Style
 from ass.data import Color
 from tqdm import tqdm
 
+from .assemble import get_colour
 from .utils import parse_subtitle
 
 
@@ -15,7 +16,7 @@ def format_timestring(time_string):
     return datetime_obj.strftime("%H:%M:%S.%f")[:-4]
 
 
-def srt2ass(directory, style_name, font_size):
+def srt2ass(directory, style_name, font_size, colour):
     base_path = Path(os.getcwd()) / directory
 
     for file in tqdm(sorted(base_path.iterdir())):
@@ -26,6 +27,7 @@ def srt2ass(directory, style_name, font_size):
                 output=base_path / output_file,
                 style_name=style_name,
                 font_size=font_size,
+                colour=colour,
             )
     print("Finish converting srt file(s).")
 
@@ -35,6 +37,7 @@ def convert(
     output,
     style_name,
     font_size,
+    colour,
 ):
     subtitle_path = input
     base_path = Path(__file__).parent.parent
@@ -76,6 +79,14 @@ def convert(
     for key in default_style:
         if "Colour" in key:
             default_style[key] = Color(*default_style[key].values())
+    if colour:
+        r, g, b = get_colour(colour)
+        default_style["OutlineColour"] = {
+            "r": int(r),
+            "g": int(g),
+            "b": int(b),
+            "a": 0,
+        }
 
     doc.styles._lines.append(Style(**default_style))
 
