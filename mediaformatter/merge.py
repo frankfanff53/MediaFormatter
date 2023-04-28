@@ -1,32 +1,12 @@
-import argparse
 import os
 import subprocess
 from pathlib import Path
 
 from tqdm import tqdm
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-d",
-        "--directory",
-        help="Directory to process",
-        required=True,
-    )
 
-    parser.add_argument(
-        "--subtitle-only",
-        help="Only merge subtitles",
-        action="store_true",
-    )
-
-    args = parser.parse_args()
-
-    if not args.directory:
-        print("No directory specified.")
-        exit(1)
-
-    directory = Path(args.directory)
+def merge(input, subtitle_only):
+    directory = Path(input)
     if not directory.exists():
         print(f"Directory {directory} does not exist.")
         exit(1)
@@ -41,7 +21,7 @@ if __name__ == "__main__":
             if not backup_file.exists():
                 file.rename(backup_file)
 
-    if not args.subtitle_only:
+    if not subtitle_only:
         for file in tqdm(
             sorted(backup_directory.iterdir()),
             desc="Dropping attachments and subtitles",

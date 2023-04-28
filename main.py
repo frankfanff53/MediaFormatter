@@ -74,5 +74,16 @@ def srt2ass(
     )
 
 
+@app.command()
+def merge(
+    input: str,
+    subtitle_only: bool = Option(
+        False,
+        help="Merge subtitles only without dropping subtitles and attachments",
+    ),
+):
+    mf.merge(input=input, subtitle_only=subtitle_only)
+
+
 if __name__ == "__main__":
     app()
