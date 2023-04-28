@@ -7,7 +7,7 @@ from pathlib import Path
 def extract(directory):
     base_path = Path(os.getcwd()) / directory
 
-    for file in base_path.iterdir():
+    for file in sorted(base_path.iterdir()):
         if file.is_file() and file.suffix == ".mkv":
             result = subprocess.run(
                 ["mkvmerge", "-J", str(base_path / file.name)],
