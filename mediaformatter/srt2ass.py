@@ -81,7 +81,7 @@ def convert(
             default_style[key] = Color(*default_style[key].values())
     if colour:
         r, g, b = get_colour(colour)
-        default_style["OutlineColour"] = Color(r=r, g=g, b=b, a=0)
+        default_style["OutlineColour"] = Color(r=int(r), g=int(g), b=int(b), a=0)
 
     doc.styles._lines.append(Style(**default_style))
 
