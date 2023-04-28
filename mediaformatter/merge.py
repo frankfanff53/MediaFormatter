@@ -75,7 +75,7 @@ def merge(input, subtitle_only):
             commands.extend(
                 [
                     "--attach-file",
-                    str(Path(__file__).parent / "fonts" / attachment),
+                    str(Path(__file__).parent.parent / "fonts" / attachment),
                 ]
             )
         result = subprocess.run(commands, capture_output=True)
