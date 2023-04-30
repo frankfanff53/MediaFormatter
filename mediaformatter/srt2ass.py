@@ -19,7 +19,9 @@ def format_timestring(time_string):
 def srt2ass(directory, style_name, font_size, colour):
     base_path = Path(os.getcwd()) / directory
 
-    for file in tqdm(sorted(base_path.iterdir())):
+    for file in tqdm(
+        sorted(base_path.iterdir()), desc="Converting srt file(s)"
+    ):
         output_file = ".".join(file.name.split(".")[:-1]) + ".ass"
         if file.is_file() and file.suffix == ".srt":
             convert(

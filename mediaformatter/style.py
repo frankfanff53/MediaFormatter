@@ -33,7 +33,7 @@ def style(
         if not backup_path.exists():
             backup_path.mkdir(parents=True)
             if input_filepath.is_file():
-                if input_filepath.suffix in set(".ass", ".srt"):
+                if input_filepath.suffix in set([".ass", ".srt"]):
                     input_filepath.rename(backup_path / input_filepath.name)
                 else:
                     print(

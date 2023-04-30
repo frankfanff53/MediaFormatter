@@ -11,7 +11,7 @@ def preprocess(directory, fonts, drop_attachments, with_jpn):
 
     if with_jpn:
         jpn_audio_track_map = {}
-        for file in base_path.iterdir():
+        for file in sorted(base_path.iterdir()):
             if file.is_file() and file.suffix == ".mkv":
                 result = subprocess.run(
                     ["mkvmerge", "-J", str(base_path / file.name)],
