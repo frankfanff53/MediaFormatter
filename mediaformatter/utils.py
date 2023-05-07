@@ -98,12 +98,9 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
             for i, line in enumerate(lines):
                 # remove all styles
                 line = re.sub(r"\{.*?\}", "", line)
-                # # TODO: if the punctuation is not followed by a space, add a space
-                # line = re.sub(
-                #     r"(?<=[.,!?])(?=[^\s\d\.,!?])",
-                #     " ",
-                #     line,
-                # )
+                # if the punctuation is not followed by a space, add a space
+                pattern = r"([a-zA-Z])([.,!?;:]|[.]{3})([a-zA-Z])"
+                line = re.sub(pattern, r"\1\2 \3", line)
                 # # TODO: Remove language detection
                 # language_detect = detector.detect_language_of(line)
                 # if language_detect is None:
@@ -120,6 +117,7 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
 
                 if use_numpad:
                     line = "{" + numpad.group() + "}" + line
+                    language = "CHINESE"
 
                 split[language].append(
                     {
