@@ -27,18 +27,17 @@ def preprocess(directory, fonts, drop_attachments, with_jpn):
 
     for file in sorted(base_path.iterdir()):
         if file.is_file() and file.suffix == ".mkv":
+            commands = [
+                "mkvmerge",
+                "--no-subtitles",
+            ]
             if with_jpn:
-                commands = [
-                    "mkvmerge",
-                    "--audio-tracks",
-                    str(jpn_audio_track_map[file.stem]),
-                    "--no-subtitles",
-                ]
-            else:
-                commands = [
-                    "mkvmerge",
-                    "--no-subtitles",
-                ]
+                commands.extend(
+                    [
+                        "--audio-tracks",
+                        str(jpn_audio_track_map[file.stem]),
+                    ]
+                )
 
             if drop_attachments:
                 commands.append("--no-attachments")
