@@ -107,6 +107,14 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
                 #     language = "CHINESE" if i == 0 else "ENGLISH"
                 # else:
                 #     language = language_detect.name
+
+                # check if line is in pattern <i></i>
+                if re.match(r"<i>.*</i>", line):
+                    # remove the <i></i> tags
+                    line = re.sub(r"<i>|</i>", "", line)
+                    # wrap the line with {\i1} and {\i0}
+                    line = r"{\i1}" + line + r"{\i0}"
+
                 language = "CHINESE" if i == 0 else "ENGLISH"
 
                 # if language == "CHINESE":
