@@ -34,6 +34,11 @@ def rename(
 
 
 @app.command()
+def fonts(input: str):
+    mf.fonts(input=input)
+
+
+@app.command()
 def preprocess(
     directory: str,
     fonts: str = Option(None, help="Directory containing fonts"),
