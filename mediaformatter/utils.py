@@ -114,14 +114,13 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
                 if re.match(r"^[a-zA-Z0-9.,!?;:'\"\s]*$", line) and not all_digits:
                     language = "ENGLISH"
                 else:
-                    language = "CHINESE" if i == 0 else "ENGLISH"
+                    language = "CHINESE"
 
                 if use_style:
                     line = style.group() + line
 
                 if use_numpad:
                     line = "{" + numpad.group() + "}" + line
-                    language = "CHINESE"
 
                 split[language].append(
                     {
