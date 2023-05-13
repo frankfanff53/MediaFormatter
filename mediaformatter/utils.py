@@ -93,6 +93,7 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
             lines = event.text.split(r"\N")
             start = event.start
             end = event.end
+            dialogs = {language.name: [] for language in languages}
             for i, line in enumerate(lines):
                 # remove all styles
                 line = re.sub(r"\{.*?\}", "", line)
@@ -143,13 +144,18 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
                 if use_italics:
                     line = r"{\i1}" + line + r"{\i0}"
 
-                split[language].append(
-                    {
-                        "start": start,
-                        "end": end,
-                        "dialog": line,
-                    }
-                )
+                dialogs[language].append(line)
+
+            for language in languages:
+                concat_dialog = " ".join(dialogs[language.name]).strip()
+                if len(concat_dialog) > 0:
+                    split[language.name].append(
+                        {
+                            "start": start,
+                            "end": end,
+                            "dialog": concat_dialog,
+                        }
+                    )
     return split
 
 
