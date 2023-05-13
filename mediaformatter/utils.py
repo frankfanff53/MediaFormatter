@@ -3,7 +3,6 @@ import re
 from pathlib import Path
 
 import ass
-
 from lingua import Language, LanguageDetectorBuilder
 
 base_path = Path(__file__).parent.parent
@@ -97,22 +96,41 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
             for i, line in enumerate(lines):
                 # remove all styles
                 line = re.sub(r"\{.*?\}", "", line)
-                # if the punctuation is not followed by a space, add a space
-                pattern = r"([a-zA-Z])([.,!?;:]|[.]{3})([a-zA-Z])"
-                line = re.sub(pattern, r"\1\2 \3", line)
 
+                use_italics = False
                 # check if line is in pattern <i></i> or </i><i> (italics)
-                if re.match(r"<i>.*</i>", line) or re.match(r"</i>.*<i>", line):
+                if re.match(r"<i>.*</i>", line) or re.match(
+                    r"</i>.*<i>", line
+                ):
                     # remove the <i></i> tags
                     line = re.sub(r"<i>|</i>", "", line)
-                    # wrap the line with {\i1} and {\i0}
-                    line = r"{\i1}" + line + r"{\i0}"
-                
+                    use_italics = True
+
                 # check if the line contains all digits and punctuation
                 all_digits = re.match(r"^[0-9.,!?;:'\"\s\-]*$", line)
+
                 # check if the line contains only English characters
-                if re.match(r"^[a-zA-Z0-9.,!?;:'\"\s\-]*$", line) and not all_digits:
+                if (
+                    re.match(r"^[a-zA-Z0-9.,!?;:'\"\s\-]*$", line)
+                    and not all_digits
+                ):
                     language = "ENGLISH"
+                    # if the punctuation is not followed by a space, add a space
+                    pattern = r"([a-zA-Z])([.,!?;:]|[.]{3})([a-zA-Z])"
+                    line = re.sub(pattern, r"\1\2 \3", line)
+                    # format the dialogs
+                    line = " ".join(
+                        [
+                            re.sub(
+                                r"^(-)(\w)",
+                                lambda m: m.group().upper(),
+                                text.strip(),
+                            )
+                            for text in re.split(r"(?<=[.!?])\s+", line)
+                        ]
+                    )
+                elif all_digits:
+                    language = "CHINESE" if i == 0 else "ENGLISH"
                 else:
                     language = "CHINESE"
 
@@ -121,6 +139,9 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
 
                 if use_numpad:
                     line = "{" + numpad.group() + "}" + line
+
+                if use_italics:
+                    line = r"{\i1}" + line + r"{\i0}"
 
                 split[language].append(
                     {
