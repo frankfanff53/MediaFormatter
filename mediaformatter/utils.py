@@ -109,9 +109,9 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
                     line = r"{\i1}" + line + r"{\i0}"
                 
                 # check if the line contains all digits and punctuation
-                all_digits = re.match(r"^[0-9.,!?;:'\"\s]*$", line)
+                all_digits = re.match(r"^[0-9.,!?;:'\"\s\-]*$", line)
                 # check if the line contains only English characters
-                if re.match(r"^[a-zA-Z0-9.,!?;:'\"\s]*$", line) and not all_digits:
+                if re.match(r"^[a-zA-Z0-9.,!?;:'\"\s\-]*$", line) and not all_digits:
                     language = "ENGLISH"
                 else:
                     language = "CHINESE"
