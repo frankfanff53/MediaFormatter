@@ -117,7 +117,7 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
                 ):
                     language = "ENGLISH"
                     # if the punctuation is not followed by a space, add a space
-                    pattern = r"([a-zA-Z])([.,!?;:]|[.]{3})([a-zA-Z])"
+                    pattern = r"([a-zA-Z'\"])([.,!?;:]|[.]{3})([a-zA-Z'\"])"
                     line = re.sub(pattern, r"\1\2 \3", line)
                     # format the dialogs
                     line = " ".join(
