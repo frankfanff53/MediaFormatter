@@ -1,7 +1,8 @@
 import os
 import re
-from .utils import parse_subtitle
 from pathlib import Path
+
+from .utils import parse_subtitle
 
 
 def get_fonts_from_doc(doc):
@@ -32,7 +33,7 @@ def analyse_fonts_from_doc(input_path, default_fonts):
 def fonts(input: str):
     base_path = Path(os.getcwd())
     input_path = base_path / input
-    default_fonts = set(['LXGWWenKaiMono-Bold', 'Tahoma'])
+    default_fonts = set(["LXGWWenKaiMono-Bold", "Tahoma"])
 
     if not input_path.exists():
         raise FileNotFoundError(f"Input path {input_path} does not exist")
