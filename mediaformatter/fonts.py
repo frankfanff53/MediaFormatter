@@ -16,7 +16,7 @@ def get_fonts_from_doc(doc):
         if r"\fn" in text:
             # get the font name
             # and the font name may contain spaces
-            font = re.search(r"\\fn(.*?)\\", text)
+            font = re.search(r"\\fn(.*?)([\}\\])", text)
             if font is not None:
                 font = font.group(1)
                 fonts.add(font)
