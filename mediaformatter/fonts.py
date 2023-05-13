@@ -39,11 +39,15 @@ def fonts(input: str):
         raise FileNotFoundError(f"Input path {input_path} does not exist")
 
     if input_path.is_file():
-        additional_fonts = analyse_fonts_from_doc(input_path, default_fonts)
+        if input_path.suffix == ".ass":
+            additional_fonts = analyse_fonts_from_doc(input_path, default_fonts)
+        else:
+            raise ValueError(f"File {input_path} cannot be analysed.")
         print("Fonts used in the subtitle:", list(additional_fonts))
     elif input_path.is_dir():
         fonts_pool = set()
         for file in sorted(input_path.iterdir()):
-            additional_fonts = analyse_fonts_from_doc(file, default_fonts)
-            fonts_pool.update(additional_fonts)
+            if file.suffix == ".ass":
+                additional_fonts = analyse_fonts_from_doc(file, default_fonts)
+                fonts_pool.update(additional_fonts)
         print("Fonts used in the subtitle:", list(fonts_pool))
