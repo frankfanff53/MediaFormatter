@@ -123,7 +123,7 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
                     line = " ".join(
                         [
                             re.sub(
-                                r"^(-)(\s)*(\w)",
+                                r"^(-)*(\s)*(\w)",
                                 lambda m: m.group().upper(),
                                 text.strip(),
                             )
