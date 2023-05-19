@@ -87,8 +87,18 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
                     r"\bord1",
                 )
 
-            # MAKE SURE THE BORDER COLOUR IS BLACK
-            style = re.sub(r"\\[13]c&H[0-9A-Fa-f]{6}", r"\\c&H000000", style)
+            # make sure the border colour is black
+            border_colour = re.search(r"\\3c&H[0-9a-fA-F]{6}&", style)
+            if border_colour is None:
+                style = style.replace(
+                    "}",
+                    r"\3c&H000000&}",
+                )
+            else:
+                style = style.replace(
+                    border_colour.group(),
+                    r"\3c&H000000&",
+                )
 
             # add the style to the dialog
             dialog = style + dialog
