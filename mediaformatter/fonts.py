@@ -40,7 +40,9 @@ def fonts(input: str):
 
     if input_path.is_file():
         if input_path.suffix == ".ass":
-            additional_fonts = analyse_fonts_from_doc(input_path, default_fonts)
+            additional_fonts = analyse_fonts_from_doc(
+                input_path, default_fonts
+            )
         else:
             raise ValueError(f"File {input_path} cannot be analysed.")
         print("Fonts used in the subtitle:", list(additional_fonts))
