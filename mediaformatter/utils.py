@@ -53,15 +53,12 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
     split = {language.name: [] for language in languages}
 
     for event in doc.events:
-        use_style = False
         # check if special formatting is used
         if (
             r"\pos" in event.text
             or r"\move" in event.text
             or r"\fad" in event.text
         ):
-            # get the style
-            use_style = True
             # extract the part with \pos, \move, \fad only
             style = re.search(
                 r"\{[^\{]*?(\\pos|\\fad|\\move)[^\{]*\}", event.text
@@ -75,11 +72,29 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
             else:
                 language = language_detect.name
 
+            style = style.group()
+
+            # check if the style already has a border
+            border = re.search(r"\\bord\d", style)
+            if border is None:
+                style = style.replace(
+                    "}",
+                    r"\bord1\shad0\blur1}",
+                )
+            else:
+                style = style.replace(
+                    border.group(),
+                    r"\bord1",
+                )
+
+            # add the style to the dialog
+            dialog = style + dialog
+
             split[language].append(
                 {
                     "start": event.start,
                     "end": event.end,
-                    "dialog": event.text,
+                    "dialog": dialog,
                 }
             )
         else:
@@ -106,6 +121,10 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
                     # remove the <i></i> tags
                     line = re.sub(r"<i>|</i>", "", line)
                     use_italics = True
+
+                # check if the line is empty
+                if len(line.strip()) == 0:
+                    continue
 
                 # check if the line contains all digits and punctuation
                 all_digits = re.match(r"^[0-9.,!?;:'\"\s\-]*$", line)
@@ -134,9 +153,6 @@ def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
                     language = "CHINESE" if i == 0 else "ENGLISH"
                 else:
                     language = "CHINESE"
-
-                if use_style:
-                    line = style.group() + line
 
                 if use_numpad:
                     line = "{" + numpad.group() + "}" + line
