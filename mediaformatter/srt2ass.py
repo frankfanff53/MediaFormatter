@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -65,6 +66,41 @@ def convert(
             dialog_start_index = dialog_end_index + 1
             timerange, text = dialog[0].replace(",", "."), " ".join(dialog[1:])
             start, end = timerange.split(" --> ")
+            # format the styled text with black border
+            style = re.search(
+                r"\{[^\{]*?(\\pos|\\fad|\\move)[^\{]*\}", text
+            ).group()
+
+            text = re.sub(r"\{.*?\}", "", text)
+
+            # check if the style already has a border
+            border = re.search(r"\\bord\d", style)
+            if border is None:
+                style = style.replace(
+                    "}",
+                    r"\bord1\shad0\blur1}",
+                )
+            else:
+                style = style.replace(
+                    border.group(),
+                    r"\bord1",
+                )
+
+            # make sure the border colour is black
+            border_colour = re.search(r"\\3c&H[0-9a-fA-F]{6}&", style)
+            if border_colour is None:
+                style = style.replace(
+                    "}",
+                    r"\3c&H000000&}",
+                )
+            else:
+                style = style.replace(
+                    border_colour.group(),
+                    r"\3c&H000000&",
+                )
+
+            text = style + text
+
             dialogs.append({"start": start, "end": end, "dialog": text})
         elif line == "\n":
             next_is_start_of_dialog = True
