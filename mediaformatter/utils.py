@@ -55,17 +55,6 @@ def split_subtitle(doc, languages=['ENGLISH', 'CHINESE']):
         dialog = event.text
         lines = dialog.split(r'\N')
         start, end = event.start, event.end
-        if i:
-            # adjust the start time
-            # peek the last ending time for both languages
-            # NOTE this might lead to a bug if the previous ending time is not synced
-            ending_times = []
-            for language in languages:
-                if len(split[language]) > 0:
-                    ending_times.append(split[language][-1]["end"])
-            latest_ending_time = max(ending_times)
-            if start < latest_ending_time:
-                start = latest_ending_time
 
         for j, line in enumerate(lines):
             style = ""

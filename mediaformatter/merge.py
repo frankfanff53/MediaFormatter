@@ -11,7 +11,7 @@ def merge(input, subtitle_only):
         print(f"Directory {directory} does not exist.")
         exit(1)
 
-    backup_directory = directory.parent / "backup" / directory.name
+    backup_directory = directory.parent / "backup" / "videos" / directory.name
 
     if not backup_directory.exists():
         backup_directory.mkdir(parents=True)

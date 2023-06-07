@@ -29,7 +29,7 @@ def style(
         exit(1)
     else:
         input_filepath = base_path
-        backup_path = base_path.parent / "backup" / base_path.name
+        backup_path = base_path.parent / "backup" / "subtitles" / base_path.name
         if not backup_path.exists():
             backup_path.mkdir(parents=True)
             if input_filepath.is_file():
