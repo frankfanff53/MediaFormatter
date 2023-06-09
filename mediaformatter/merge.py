@@ -53,7 +53,7 @@ def merge(input, subtitle_only):
         sorted(backup_directory.iterdir()),
         desc="Merging subtitles",
     ):
-        if file.suffix != ".mkv":
+        if file.suffix not in set([".mkv", ".mp4"]):
             continue
 
         commands = [
