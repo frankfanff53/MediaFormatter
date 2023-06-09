@@ -34,7 +34,7 @@ def fonts(input: str):
     base_path = Path(os.getcwd())
     input_path = base_path / input
     default_fonts_path = Path(__file__).parent.parent / "fonts"
-    default_fonts = set([font.stem for font in default_fonts_path.iterdir()])
+    default_fonts = set([font.stem.lower() for font in default_fonts_path.iterdir()])
 
     if not input_path.exists():
         raise FileNotFoundError(f"Input path {input_path} does not exist")
