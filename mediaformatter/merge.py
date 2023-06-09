@@ -66,7 +66,7 @@ def merge(input, subtitle_only):
             "chi",
             str(backup_directory / f"{file.stem}.ass"),
             "-o",
-            str(directory / file.name),
+            str(directory / f"{file.stem}.mkv"),
         ]
         for attachment in os.listdir(Path(__file__).parent.parent / "fonts"):
             commands.extend(
