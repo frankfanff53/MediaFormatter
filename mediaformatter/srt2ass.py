@@ -69,37 +69,37 @@ def convert(
             # format the styled text with black border
             style = re.search(
                 r"\{[^\{]*?(\\pos|\\fad|\\move)[^\{]*\}", text
-            ).group()
-
+            )
             text = re.sub(r"\{.*?\}", "", text)
+            if style:
+                style = style.group()
+                # check if the style already has a border
+                border = re.search(r"\\bord\d", style)
+                if border is None:
+                    style = style.replace(
+                        "}",
+                        r"\bord1\shad0\blur1}",
+                    )
+                else:
+                    style = style.replace(
+                        border.group(),
+                        r"\bord1",
+                    )
 
-            # check if the style already has a border
-            border = re.search(r"\\bord\d", style)
-            if border is None:
-                style = style.replace(
-                    "}",
-                    r"\bord1\shad0\blur1}",
-                )
-            else:
-                style = style.replace(
-                    border.group(),
-                    r"\bord1",
-                )
+                # make sure the border colour is black
+                border_colour = re.search(r"\\3c&H[0-9a-fA-F]{6}&", style)
+                if border_colour is None:
+                    style = style.replace(
+                        "}",
+                        r"\3c&H000000&}",
+                    )
+                else:
+                    style = style.replace(
+                        border_colour.group(),
+                        r"\3c&H000000&",
+                    )
 
-            # make sure the border colour is black
-            border_colour = re.search(r"\\3c&H[0-9a-fA-F]{6}&", style)
-            if border_colour is None:
-                style = style.replace(
-                    "}",
-                    r"\3c&H000000&}",
-                )
-            else:
-                style = style.replace(
-                    border_colour.group(),
-                    r"\3c&H000000&",
-                )
-
-            text = style + text
+                text = style + text
 
             dialogs.append({"start": start, "end": end, "dialog": text})
         elif line == "\n":
