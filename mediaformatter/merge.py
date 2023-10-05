@@ -65,16 +65,6 @@ def merge(input, subtitle_only):
             "-o",
             str(directory / file.with_suffix(".mkv").name),
         ]
-        for attachment in os.listdir(Path(__file__).parent.parent / "fonts"):
-            commands.extend(
-                ["--attachment-mime-type", "application/x-truetype-font"]
-            )
-            commands.extend(
-                [
-                    "--attach-file",
-                    str(Path(__file__).parent.parent / "fonts" / attachment),
-                ]
-            )
         result = subprocess.run(commands, capture_output=True)
         if result.returncode != 0:
             print(result.stderr.decode("utf-8"))
