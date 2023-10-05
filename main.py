@@ -26,10 +26,12 @@ def style(
 def rename(
     format: str,
     movie: bool = Option(False, help="Whether to rename files for a movie"),
+    start: int = Option(1, help="The starting episode number"),
 ):
     mf.rename(
         format=format,
         movie=movie,
+        start=start,
     )
 
 
