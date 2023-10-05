@@ -7,7 +7,7 @@ from pathlib import Path
 def preprocess(directory, fonts, drop_attachments, with_jpn):
     base_path = Path(os.getcwd()) / directory
     if fonts:
-        fonts_path = Path(os.getcwd()) / fonts
+        extra_fonts_path = Path(os.getcwd()) / fonts
 
     if with_jpn:
         jpn_audio_track_map = {}
@@ -40,14 +40,23 @@ def preprocess(directory, fonts, drop_attachments, with_jpn):
         if drop_attachments:
             commands.append("--no-attachments")
         commands.append(str(base_path / file.name))
+        for attachment in os.listdir(Path(__file__).parent.parent / "fonts"):
+            commands.extend(
+                [
+                    "--attachment-mime-type",
+                    "application/x-truetype-font",
+                    "--attach-file",
+                    str(Path(__file__).parent.parent / "fonts" / attachment),
+                ]
+            )
         if fonts:
-            for font in fonts_path.glob("*.[o|t]tf"):
+            for font in extra_fonts_path.glob("*.[o|t]tf"):
                 commands.extend(
                     [
                         "--attachment-mime-type",
                         "application/x-truetype-font",
                         "--attach-file",
-                        str(fonts_path / font.name),
+                        str(extra_fonts_path / font.name),
                     ]
                 )
         commands.extend(
