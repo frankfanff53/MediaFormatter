@@ -1,11 +1,10 @@
 import json
-import os
 import subprocess
 from pathlib import Path
 
 
 def extract(directory):
-    base_path = Path(os.getcwd()) / directory
+    base_path = Path().cwd() / directory
 
     for file in sorted(base_path.glob("*.mkv")):
         result = subprocess.run(
@@ -37,7 +36,8 @@ def extract(directory):
                             "mkvextract",
                             "tracks",
                             file.name,
-                            f"{track_id}:{file.stem}_{'_'.join(track_name.split())}.{subtitle_suffix}",
+                            f"{track_id}:{file.stem}_"
+                            f"{'_'.join(track_name.split())}.{subtitle_suffix}"
                         ],
                     )
                     if result.returncode != 0:

@@ -1,4 +1,3 @@
-import os
 import re
 from pathlib import Path
 
@@ -31,7 +30,7 @@ def analyse_fonts_from_doc(input_path, default_fonts):
 
 
 def fonts(input: str):
-    base_path = Path(os.getcwd())
+    base_path = Path().getcwd()
     input_path = base_path / input
     default_fonts_path = Path(__file__).parent.parent / "fonts"
     # get font names under the default_fonts_paths
