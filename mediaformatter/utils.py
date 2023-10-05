@@ -53,17 +53,16 @@ def split_subtitle(doc, languages=['ENGLISH', 'CHINESE']):
     for i, event in enumerate(doc.events):
         # extract the text
         dialog = event.text
-        lines = dialog.split(r'\N')
+        if re.search(r"\\pos|\\move|\\fad", dialog):
+            lines = dialog
+        else:
+            lines = dialog.split(r'\N')
         start, end = event.start, event.end
 
         for j, line in enumerate(lines):
             style = ""
             # handle with special styles
-            if (
-                r"\pos" in line
-                or r"\move" in line
-                or r"\fad" in line
-            ):
+            if re.search(r"\\pos|\\move|\\fad", line):
                 # extract the part with \pos, \move, \fad only
                 style = re.search(
                     r"\{[^\{]*?(\\pos|\\fad|\\move)[^\{]*\}", line

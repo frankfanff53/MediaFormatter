@@ -29,7 +29,8 @@ def style(
         exit(1)
     else:
         input_filepath = base_path
-        backup_path = base_path.parent / "backup" / "subtitles" / base_path.name
+        backup_path = base_path.parent / "backup" / \
+            "subtitles" / base_path.name
         if not backup_path.exists():
             backup_path.mkdir(parents=True)
             if input_filepath.is_file():
@@ -37,7 +38,8 @@ def style(
                     input_filepath.rename(backup_path / input_filepath.name)
                 else:
                     print(
-                        f"File {input_filepath.name} is not in supported subtitle format, aborted."
+                        f"File {input_filepath.name} is not in supported "
+                        "subtitle format, aborted."
                     )
                     exit(1)
             else:
