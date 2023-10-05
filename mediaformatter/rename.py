@@ -8,6 +8,7 @@ from tqdm import tqdm
 def rename(
     format: str,
     movie: bool,
+    start: int = 1,
 ) -> None:
     base_path = Path(os.getcwd())
     if os.name == "nt":
@@ -26,7 +27,7 @@ def rename(
         if movie:
             renamed_file = f"{working_dir}.{format}"
         else:
-            renamed_file = f"{working_dir}E{i+1:0>2}.{format}"
+            renamed_file = f"{working_dir}E{i+start:0>2}.{format}"
         print(f"Renaming: {file} -> {renamed_file}")
         renaming_schema.append((file, renamed_file))
     choice = input("Continue? (y/n): ")
