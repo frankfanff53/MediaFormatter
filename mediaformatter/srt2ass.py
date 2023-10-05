@@ -21,17 +21,16 @@ def srt2ass(directory, style_name, font_size, colour):
     base_path = Path(os.getcwd()) / directory
 
     for file in tqdm(
-        sorted(base_path.iterdir()), desc="Converting srt file(s)"
+        sorted(base_path.glob("*.srt")), desc="Converting srt file(s)"
     ):
-        output_file = ".".join(file.name.split(".")[:-1]) + ".ass"
-        if file.is_file() and file.suffix == ".srt":
-            convert(
-                input=file,
-                output=base_path / output_file,
-                style_name=style_name,
-                font_size=font_size,
-                colour=colour,
-            )
+        output_file = file.with_suffix(".ass").name
+        convert(
+            input=file,
+            output=base_path / output_file,
+            style_name=style_name,
+            font_size=font_size,
+            colour=colour,
+        )
     print("Finish converting srt file(s).")
 
 

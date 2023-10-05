@@ -23,14 +23,13 @@ def merge(input, subtitle_only):
 
     if not subtitle_only:
         for file in tqdm(
-            sorted(backup_directory.iterdir()),
+            sorted(backup_directory.glob("*.mkv")),
             desc="Dropping attachments and subtitles",
         ):
-            if file.suffix != ".mkv":
-                continue
             # drop all attachments and subtitles
             filename = file.name
-            modified_file = backup_directory / f"{filename}.mod.mkv"
+            modified_file = backup_directory / \
+                filename.with_suffix(".mod.mkv").name
             commands = [
                 "mkvmerge",
                 "--no-subtitles",
@@ -50,11 +49,9 @@ def merge(input, subtitle_only):
                 modified_file.rename(backup_directory / filename)
 
     for file in tqdm(
-        sorted(backup_directory.iterdir()),
+        sorted(backup_directory.glob("*.[mkv|mp4]")),
         desc="Merging subtitles",
     ):
-        if file.suffix not in set([".mkv", ".mp4"]):
-            continue
 
         commands = [
             "mkvmerge",
@@ -64,9 +61,9 @@ def merge(input, subtitle_only):
             "0:chi",
             "--default-language",
             "chi",
-            str(backup_directory / f"{file.stem}.ass"),
+            str(backup_directory / file.with_suffix(".ass").name),
             "-o",
-            str(directory / f"{file.stem}.mkv"),
+            str(directory / file.with_suffix(".mkv").name),
         ]
         for attachment in os.listdir(Path(__file__).parent.parent / "fonts"):
             commands.extend(
