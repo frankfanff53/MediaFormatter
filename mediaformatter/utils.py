@@ -4,9 +4,6 @@ from pathlib import Path
 
 import ass
 
-# import pycorrector
-from lingua import Language, LanguageDetectorBuilder
-
 base_path = Path(__file__).parent.parent
 with open(base_path / "config" / "encodings.json", "r") as f:
     ENCODINGS = json.load(f)
@@ -39,97 +36,89 @@ def parse_subtitle(path, available_encodings=ENCODINGS):
         raise Exception("Failed to parse subtitle file.")
 
 
-def split_subtitle(doc, languages=[Language.ENGLISH, Language.CHINESE]):
+def split_subtitle(doc, languages=['ENGLISH', 'CHINESE']):
     """Split subtitle file into different languages.
 
     Args:
         path (Union[str, PurePath]): Path to the subtitle file.
-        languages (Optional[List[Language]], optional): List of languages to split. Defaults to [Language.ENGLISH, Language.CHINESE].
+        languages (Optional[str], optional): List of languages to split. Defaults to ['ENGLISH', 'CHINESE'].
 
     Returns:
         A dictionary of language and list of dialogues.
     """
     if len(languages) == 0:
-        raise Exception("No language specified.")
-    detector = LanguageDetectorBuilder.from_languages(*languages).build()
-    split = {language.name: [] for language in languages}
+        raise ValueError("No language specified.")
+    split = {language: [] for language in languages}
 
-    for event in doc.events:
-        use_style = False
-        # check if special formatting is used
-        if (
-            r"\pos" in event.text
-            or r"\move" in event.text
-            or r"\fad" in event.text
-        ):
-            # get the style
-            use_style = True
-            # extract the part with \pos, \move, \fad only
-            style = re.search(
-                r"\{[^\{]*?(\\pos|\\fad|\\move)[^\{]*\}", event.text
-            )
-            # remove the style from the text
-            dialog = re.sub(r"\{.*?\}", "", event.text)
-            language_detect = detector.detect_language_of(dialog)
-            if language_detect is None:
-                continue
+    for i, event in enumerate(doc.events):
+        # extract the text
+        dialog = event.text
+        lines = dialog.split(r'\N')
+        start, end = event.start, event.end
+
+        for j, line in enumerate(lines):
+            style = ""
+            # handle with special styles
+            if (
+                r"\pos" in line
+                or r"\move" in line
+                or r"\fad" in line
+            ):
+                # extract the part with \pos, \move, \fad only
+                style = re.search(
+                    r"\{[^\{]*?(\\pos|\\fad|\\move)[^\{]*\}", line
+                ).group()
+                # remove the original style from the text
+                line = re.sub(r"\{.*?\}", "", line)
+                # check if the style has a border
+                border = re.search(r"\\bord\d+", style)
+                if border:
+                    # replace the border with 1
+                    style = re.sub(r"\\bord\d+", r"\\bord1", style)
+                else:
+                    # remove the closing bracket and add border
+                    style = style[:-1] + r"\bord1}"
+                # check if the style has a border colour
+                border_colour = re.search(r"\\3c&H[0-9a-fA-F]{6}&", style)
+                if border_colour:
+                    # replace the border colour with black
+                    style = re.sub(r"\\3c&H[0-9a-fA-F]{6}&", r"\\3c&H000000&", style)
+                else:
+                    # remove the closing bracket and add border colour
+                    style = style[:-1] + r"\3c&H000000&}"
             else:
-                language = language_detect.name
-
-            split[language].append(
-                {
-                    "start": event.start,
-                    "end": event.end,
-                    "dialog": event.text,
-                }
-            )
-        else:
-            # check if numpad \an<alignment> is used
-            use_numpad = False
-            numpad = re.search(r"\\an\d", event.text)
-            if numpad is not None:
-                use_numpad = True
-
-            # split text into lines
-            lines = event.text.split(r"\N")
-            start = event.start
-            end = event.end
-            for i, line in enumerate(lines):
+                if line.strip() == "":
+                    continue
+                # check if numberpad \an<alignment> is used
+                numpad = re.search(r"\\an\d", line)
+                if numpad:
+                    style = "{" + numpad.group() + "}"
                 # remove all styles
                 line = re.sub(r"\{.*?\}", "", line)
-                # if the punctuation is not followed by a space, add a space
-                line = re.sub(
-                    r"(?<=[.,!?])(?=[^\s\d\.,!?])",
-                    " ",
-                    line,
-                )
-                language_detect = detector.detect_language_of(line)
-                if language_detect is None:
-                    language = "CHINESE" if i == 0 else "ENGLISH"
-                else:
-                    language = language_detect.name
+                # check if line is in pattern <i></i> or </i><i> (italics)
+                if re.match(r"<i>.*</i>", line) or re.match(
+                    r"</i>.*<i>", line
+                ):
+                    # remove the <i></i> tags
+                    line = re.sub(r"<i>|</i>", "", line)
+                    # add italics
+                    style = r"{\i1}" if len(style) == 0 else style[:-1] + r"\i1}"
 
-                # if language == "CHINESE":
-                #     line, _ = pycorrector.correct(line)
+            # detect the language
+            # 1st principle: if the line contains any Chinese characters, it is Chinese
+            if re.search(u"[\u4e00-\u9fff]", line):
+                language = "CHINESE"
+            elif re.match(r"^[0-9.,!?;:'\"\s\-]*$", line):
+                language = "CHINESE" if j == 0 else "ENGLISH"
+            else:
+                language = "ENGLISH"
 
-                if use_style:
-                    line = style.group() + line
-
-                if use_numpad:
-                    line = "{" + numpad.group() + "}" + line
-
-                split[language].append(
-                    {
-                        "start": start,
-                        "end": end,
-                        "dialog": line,
-                    }
-                )
+            # add the line to the corresponding language
+            split[language].append(
+                {
+                    "start": start,
+                    "end": end,
+                    "dialog": style + line,
+                }
+            )
     return split
-
-
-if __name__ == "__main__":
-    base_path = Path(__file__).parent.parent
-    doc = parse_subtitle(base_path / "config" / "ref.ass")
-
-    print(doc.events.field_order)

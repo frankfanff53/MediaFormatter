@@ -19,6 +19,7 @@ lingua-language-detector = "^1.3.2"
 matplotlib = "^3.7.1"
 autocorrect = "^2.6.1"
 tqdm = "^4.65.0"
+typer = "^0.7.0"
 
 
 [build-system]

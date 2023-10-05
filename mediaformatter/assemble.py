@@ -13,7 +13,20 @@ COLOUR_MAP = {
     "black": "black",
     "red": "firebrick",
     "blue": "royalblue",
+    "comedy": np.array([0, 128, 255]) / 255,
 }
+
+
+def get_colour(colour):
+    if colour not in COLOUR_MAP:
+        try:
+            r, g, b = np.array(to_rgb(colour)) * 255
+        except Exception:
+            print(f"Colour {colour} is not supported, please try it again")
+            exit(1)
+    else:
+        r, g, b = np.array(to_rgb(COLOUR_MAP[colour])) * 255
+    return r, g, b
 
 
 def render_to_subtitle(input_path, output_path, **kwargs):
@@ -35,16 +48,7 @@ def render_to_subtitle(input_path, output_path, **kwargs):
     with open(base_path / "config" / "styles" / "CHINESE.json", "r") as f:
         chinese_style = json.load(f)
     if colour_overwrite:
-        if colour_overwrite not in COLOUR_MAP:
-            try:
-                r, g, b = np.array(to_rgb(colour_overwrite)) * 255
-            except Exception:
-                print(
-                    f"Colour {colour_overwrite} is not supported, please try it again"
-                )
-                exit(1)
-        else:
-            r, g, b = np.array(to_rgb(COLOUR_MAP[colour_overwrite])) * 255
+        r, g, b = get_colour(colour_overwrite)
         chinese_style["OutlineColour"] = {
             "r": int(r),
             "g": int(g),

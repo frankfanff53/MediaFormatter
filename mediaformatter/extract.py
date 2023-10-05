@@ -1,36 +1,21 @@
-import argparse
 import json
+import os
 import subprocess
 from pathlib import Path
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-d",
-        "--directory",
-        type=str,
-        default=".",
-        help="Directory to extract subtitles from",
-    )
 
-    args = parser.parse_args()
+def extract(directory):
+    base_path = Path(os.getcwd()) / directory
 
-    base_path = Path(args.directory)
-    if not base_path.is_dir():
-        raise ValueError(f"{base_path} is not a directory.")
-    if not base_path.exists():
-        raise ValueError(f"{base_path} does not exist.")
-
-    for file in base_path.iterdir():
+    for file in sorted(base_path.iterdir()):
         if file.is_file() and file.suffix == ".mkv":
             result = subprocess.run(
-                ["mkvmerge", "-J", file.name],
+                ["mkvmerge", "-J", str(base_path / file.name)],
                 capture_output=True,
                 text=True,
             )
             if result.returncode == 0:
                 mkv_info = json.loads(result.stdout)
-                chi_track_ids = []
                 for track in mkv_info["tracks"]:
                     if track["type"] == "subtitles":
                         track_id = track["id"]
