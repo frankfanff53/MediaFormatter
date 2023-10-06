@@ -1,5 +1,6 @@
 import json
 import re
+from datetime import timedelta
 from pathlib import Path
 
 import ass
@@ -36,11 +37,12 @@ def parse_subtitle(path, available_encodings=ENCODINGS):
         raise Exception("Failed to parse subtitle file.")
 
 
-def split_subtitle(doc, languages=['ENGLISH', 'CHINESE']):
+def split_subtitle(doc, align, languages=['ENGLISH', 'CHINESE']):
     """Split subtitle file into different languages.
 
     Args:
         path (Union[str, PurePath]): Path to the subtitle file.
+        align (Union[float, None]): Time interval to align the video and subtitle.
         languages (Optional[str], optional): List of languages to split. Defaults to ['ENGLISH', 'CHINESE'].
 
     Returns:
@@ -50,14 +52,23 @@ def split_subtitle(doc, languages=['ENGLISH', 'CHINESE']):
         raise ValueError("No language specified.")
     split = {language: [] for language in languages}
 
+    prev_end = None
     for i, event in enumerate(doc.events):
         # extract the text
         dialog = event.text
         if re.search(r"\\pos|\\move|\\fad", dialog):
-            lines = dialog
+            lines = [dialog]
         else:
             lines = dialog.split(r'\N')
         start, end = event.start, event.end
+        if align:
+            align = float(align)
+            start += timedelta(seconds=align)
+            end += timedelta(seconds=align)
+
+        if prev_end and start < prev_end:
+            start = prev_end
+        prev_end = end
 
         for j, line in enumerate(lines):
             style = ""

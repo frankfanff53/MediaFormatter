@@ -14,14 +14,16 @@ def style(
     fontname: str,
     fontsize: Integral,
     bold: bool,
+    align: str,
 ) -> None:
-    base_path = Path(os.getcwd()) / input
+    base_path = Path().cwd() / input
 
     render_args = {
         "colour": colour,
         "fontsize": fontsize,
         "fontname": fontname,
         "bold": bold,
+        "align": align,
     }
 
     if not base_path.exists():

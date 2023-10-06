@@ -4,9 +4,9 @@ from pathlib import Path
 
 
 def preprocess(directory, fonts, drop_attachments, with_jpn):
-    base_path = Path().getcwd() / directory
+    base_path = Path().cwd() / directory
     if fonts:
-        extra_fonts_path = Path().getcwd() / fonts
+        extra_fonts_path = Path().cwd() / fonts
 
     if with_jpn:
         jpn_audio_track_map = {}
@@ -38,7 +38,7 @@ def preprocess(directory, fonts, drop_attachments, with_jpn):
 
         if drop_attachments:
             commands.append("--no-attachments")
-        commands.append(str(base_path / file.name))
+        commands.append(str(file))
         for attachment in (
             (Path(__file__).parent.parent / "fonts").glob("*.[o|t]tf")
         ):

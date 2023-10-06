@@ -12,6 +12,7 @@ def style(
     fontname: str = Option(None, help="Font to render subtitles in"),
     fontsize: int = Option(None, help="Font size to render subtitles in"),
     bold: bool = Option(False, help="Whether to render subtitles in bold"),
+    align: str = Option(None, help="Time interval to align the video and subtitle."),
 ):
     mf.style(
         input=input,
@@ -19,6 +20,7 @@ def style(
         fontname=fontname,
         fontsize=fontsize,
         bold=bold,
+        align=align,
     )
 
 
@@ -27,11 +29,13 @@ def rename(
     format: str,
     movie: bool = Option(False, help="Whether to rename files for a movie"),
     start: int = Option(1, help="The starting episode number"),
+    name: str = Option(None, help="The name of the series"),
 ):
     mf.rename(
         format=format,
         movie=movie,
         start=start,
+        name=name,
     )
 
 

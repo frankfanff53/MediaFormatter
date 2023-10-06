@@ -9,9 +9,10 @@ def rename(
     format: str,
     movie: bool,
     start: int = 1,
+    name: str = None,
 ) -> None:
-    base_path = Path().getcwd()
-    working_dir = base_path.name
+    base_path = Path().cwd()
+    working_dir = base_path.name if not name else name
     renamed_files = sorted(base_path.glob(f"*.{format}"))
 
     if len(re.findall(r"S\d{2}", working_dir)) == 0 and not movie:

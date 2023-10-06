@@ -30,13 +30,13 @@ def analyse_fonts_from_doc(input_path, default_fonts):
 
 
 def fonts(input: str):
-    base_path = Path().getcwd()
+    base_path = Path().cwd()
     input_path = base_path / input
     default_fonts_path = Path(__file__).parent.parent / "fonts"
     # get font names under the default_fonts_paths
     # where the fonts have suffix .ttf or .otf
     default_fonts = set([
-        str(font.name.with_suffix(""))
+        str(font.with_suffix("").name)
         for font in default_fonts_path.glob("*.[o|t]tf")
         if font.is_file()
     ])
