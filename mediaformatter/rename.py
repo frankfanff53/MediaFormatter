@@ -9,15 +9,11 @@ def rename(
     format: str,
     movie: bool,
     start: int = 1,
+    name: str = None,
 ) -> None:
-    base_path = Path(os.getcwd())
-    if os.name == "nt":
-        working_dir = str(base_path).split("\\")[-1]
-    else:
-        working_dir = str(base_path).split("/")[-1]
-    renamed_files = sorted(
-        [file for file in os.listdir(base_path) if file.endswith("." + format)]
-    )
+    base_path = Path().cwd()
+    working_dir = base_path.name if not name else name
+    renamed_files = sorted(base_path.glob(f"*.{format}"))
 
     if len(re.findall(r"S\d{2}", working_dir)) == 0 and not movie:
         working_dir += ".S01"

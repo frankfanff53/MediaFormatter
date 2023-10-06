@@ -1,11 +1,10 @@
 import json
-import os
 import subprocess
 from pathlib import Path
 
 
 def extract(directory):
-    base_path = Path(os.getcwd()) / directory
+    base_path = Path().cwd() / directory
 
     for file in sorted(base_path.glob("*.mkv")):
         result = subprocess.run(
@@ -24,20 +23,22 @@ def extract(directory):
                         track_name = track["properties"]["language"]
                     codec = track["codec"]
                     if "substationalpha" in codec.lower():
-                        subtitle_suffix = "ass"
+                        sub_suffix = "ass"
                     elif "srt" in codec.lower():
-                        subtitle_suffix = "srt"
+                        sub_suffix = "srt"
                     else:
                         raise ValueError(
                             f"Subtitle format {codec} is not supported."
                         )
 
+                    assert isinstance(file, Path)
                     result = subprocess.run(
                         [
                             "mkvextract",
                             "tracks",
-                            file.name,
-                            f"{track_id}:{file.stem}_{'_'.join(track_name.split())}.{subtitle_suffix}",
+                            str(file),
+                            f"{track_id}:"
+                            f"{file.with_suffix(f'.{track_name}.{sub_suffix}')}"
                         ],
                     )
                     if result.returncode != 0:

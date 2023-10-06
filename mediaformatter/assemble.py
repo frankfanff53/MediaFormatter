@@ -31,10 +31,11 @@ def get_colour(colour):
 
 def render_to_subtitle(input_path, output_path, **kwargs):
     base_path = Path(__file__).parent.parent
+    align = kwargs.get("align")
 
     doc = parse_subtitle(input_path)
     # Split subtitle into languages
-    split = split_subtitle(doc)
+    split = split_subtitle(doc, align)
 
     chinese_dialogs = split["CHINESE"]
     english_dialogs = split["ENGLISH"]
