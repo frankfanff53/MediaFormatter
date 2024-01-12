@@ -53,7 +53,7 @@ def split_subtitle(doc, align, languages=['ENGLISH', 'CHINESE']):
     split = {language: [] for language in languages}
 
     prev_end = None
-    for i, event in enumerate(doc.events):
+    for event in sorted(doc.events, key=lambda event: event.start):
         # extract the text
         dialog = event.text
         if re.search(r"\\pos|\\move|\\fad", dialog):
