@@ -1,81 +1,41 @@
-# Python Media Formatter
+# MediaFormatter: Effortless Video and Subtitle Handling at Your Fingertips
 
-A python library for reformatting the subtitle `.ass` files and wrapping subtitles to the target videos.
+Welcome to MediaFormatter, a lean yet powerful command-line interface (CLI). It enables you to manage media files with ease. Regardless of whether you are a seasoned developer or a beginner, MediaFormatter offers an effortless approach to managing videos and subtitles like never before.
 
-## Installation
+## Exciting Features
 
-To install this library you need to use the following command lines:
+**Rename with Ease**: Organize your media collection effortlessly. Batch rename video files and subtitles following a specific format such as "Title.of.the.TV.Series.SXXEXX".
+
+**Tailor-Made Styles**: Personalize your viewing by customizing the styles of `.ass` subtitle files. Adjust everything from font name to color, boldness, and even italicization. Added bonus: you can personalize styles for different languages!
+
+**Preprocess, Merge and Tag**: Choose your preferred audio/video tracks and merge them with subtitles. Add language tags to subtitles and combine attachments including font files.
+
+**Text-Based Subtitle Conversion and Extraction**: Presently, MediaFormatter supports the extraction of subtitles and conversion between text-based formats like `.ass` and `.srt`. The power to convert and extract subtitles gives you greater flexibility in how you choose to use them.
+
+**Perfect Alignment**: Sync your subtitles flawlessly to the video stream by adjusting their timestamps.
+
+The best part? With MediaFormatter, you can perform these operations on individual files or on multiple files at once - your choice!
+
+*Note: We're considering leveraging advanced technologies like object detection and text recognition to extract and convert text from more complex sources like PGS subtitles or on-screen displayed text in the future.*
+
+## Unleashing the Power of MediaFormatter
+
+Using MediaFormatter is as simple as typing `mf`, followed by your command, arguments, and options:
 
 ```bash
-git clone git@github.com:frankfanff53/MediaFormatter.git
-cd MediaFormatter
-make install
+mf <command> <args> <options>
 ```
+Imagine you need to extract all subtitle tracks from a whole season of your favorite show:
 
-## Core Functionalities
-
-- [x] Parse a subtitle file
-
-### Usage of `mediaformatter.parse_title`
-
-```python
-import mediaformatter as mf
-from pathlib import Path
-
-
-if __name__ == "__main__":
-    base_path = Path(__file__).parent
-    doc = mf.parse_subtitle(
-        base_path / "config" / "reference.ass"
-    )
-    if doc is None:
-        print("Failed to parse subtitle file.")
-        exit()
-    else:
-        print("Successfully parsed subtitle file.")
-
-    print("Event count:", len(doc.events))
-    print(doc.events[0].text)
+```bash
+mf extract Friends.S01 --all
 ```
+In this command, `extract` informs MediaFormatter what to do, `Friends.S01` tells it where the videos are, and `--all` commands it to process every file in the folder. Sit back and watch as MediaFormatter extracts all subtitle tracks, renames them to match their corresponding video, and appends an identification for the language along with a `.ass` extension.
 
-If parsing is successful, you should expect the following printed result in teh console:
+## Noteworthies
 
-```txt
-Successfully parsed subtitle file.
-Event count: 426
-《生活大爆炸》  前情提要\N{\fnTahoma\b0}Previously on The Big Bang Theory...{\r}
-```
+Batch processing is a gem, but sometimes you might encounter errors. Don't panic - MediaFormatter is designed to continue processing the remaining files. A comprehensive logging system has your back, keeping track of all operations and helping identify any issues.
 
-which is the last line that shows the first line of the dialog.
+---
 
-- [x] Extract the subtitles into different languages
-
-### Usage of `mediaformatter.split_subtitle`
-
-```python
-base_path = Path(__file__).parent
-split = mf.split_subtitle(
-    base_path / "config" / "reference.ass"
-)
-
-print("English:")
-for line in split["ENGLISH"][:5]:
-    print(line["start"], line["end"], line["dialog"], sep=", ")
-```
-
-If the subtitle splitting is successful, you should expect the printed result in the console:
-
-```txt
-English:
-0:00:02.160000, 0:00:04.060000, Previously on The Big Bang Theory...
-0:00:03.960000, 0:00:07.840000, We now pronounce you husband and wife!
-0:00:10.050000, 0:00:12.050000, I love this part!
-0:00:12.050000, 0:00:13.650000, Me, too!
-0:00:13.880000, 0:00:17.390000, I have strongly mixed feelings!
-```
-
-which is the first five English dialogs in the subtitle, with start and end timestamps.
-
-- [ ] Reformat the subtitle with the default configuration
-- [ ] Reformat the subtitle with the custom configuration
-- [ ] Merge the subtitle files to the corresponding video file
+Get ready to experience media handling like never before with MediaFormatter!
