@@ -1,24 +1,18 @@
 [tool.poetry]
 name = "mediaformatter"
-version = "0.1.0"
-description = ""
+version = "1.0.0"
+description = "MediaFormatter: Effortless Video and Subtitle Handling at Your Fingertips"
 authors = ["Feifan Fan <frankfanff53@gmail.com>"]
 readme = "README.md"
+license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.8.1, < 4.0"
-ass = "^0.5.2"
-numpy = "^1.24.2"
-pytest = "^7.2.2"
-flake8 = "^6.0.0"
-autoflake = "^2.0.1"
-isort = "^5.12.0"
-black = "^23.1.0"
-six = "^1.16.0"
-matplotlib = "^3.7.1"
-tqdm = "^4.65.0"
-typer = "^0.7.0"
-rich = "^13.6.0"
+python = ">=3.9, <4.0"
+ass = "^0.5.4"
+typer = "^0.9.0"
+numpy = "^1.26.3"
+matplotlib = "^3.8.2"
+tqdm = "^4.66.1"
 
 
 [build-system]
